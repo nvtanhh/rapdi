@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "861941999483",
+    "firebase_url": "https://rapdi-2e62c.firebaseio.com",
+    "project_id": "rapdi-2e62c",
+    "storage_bucket": "rapdi-2e62c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861941999483:android:99c055e8fc4e659941bfde",
+        "android_client_info": {
+          "package_name": "com.example.rapdi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861941999483-mvf5rbrc2n6gmghqe3ikfp9sep5554tq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rapdi",
+            "certificate_hash": "882d1e8d5cb930c1af205e736f6da70fdf9b72fb"
+          }
+        },
+        {
+          "client_id": "861941999483-63tlcn84l6m7aieddi3jpn855518m8os.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGITuQXRlKhdlSRenEdQ6aIogChJzSvNk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861941999483-63tlcn84l6m7aieddi3jpn855518m8os.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

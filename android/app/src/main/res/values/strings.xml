@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Rapdi</string>
+    <string name="facebook_app_id">458684761766688</string>
+    <string name="fb_login_protocol_scheme">fb458684761766688</string>
+</resources>
