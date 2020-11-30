@@ -1,26 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-import '../app_theme.dart';
 
 class NoResultFound extends StatelessWidget {
   final String mess;
+  final String url;
 
-  NoResultFound({this.mess});
+  NoResultFound({this.mess, this.url = 'assets/images/no_result.png'});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset('assets/images/no_result.svg'),
-          SizedBox(height: 30),
-          Text(
-            mess,
-            style: AppTheme.secondaryText,
-          ),
-        ],
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height * 0.6,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              url,
+              width: size.width * 0.5,
+            ),
+            SizedBox(height: 30),
+            Text(
+              mess,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 16, color: Colors.black45),
+            ),
+          ],
+        ),
       ),
     );
   }

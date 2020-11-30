@@ -23,13 +23,13 @@ class SongsManager extends StatefulWidget {
 }
 
 class _SongsManagerState extends State<SongsManager> {
-  // List<Song> _songs;
+  List<Song> _songs;
 
-  // final FiretoreService firestoreService = FiretoreService();
+  final FiretoreService firestoreService = FiretoreService();
 
   @override
   void initState() {
-    // getAllSong();
+    getAllSong();
     super.initState();
   }
 
@@ -37,32 +37,34 @@ class _SongsManagerState extends State<SongsManager> {
   Widget build(BuildContext context) {
     final songProvider = Provider.of<FiretoreService>(context);
     return Scaffold(
-      body: StreamBuilder(
-          stream: songProvider.fetSongsAsStream(),
-          builder: (context, snapshot) {
-            return Padding(
-              padding: const EdgeInsets.only(top: 8.0, left: 18, right: 18),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).padding.top,
-                  ),
-                  getAppBarUI(),
-                  Expanded(
-                    child: _getSearchBarUI(sortByTime(snapshot.data)),
-                  )
-                ],
-              ),
-            );
-          }),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8.0, left: 18, right: 18),
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).padding.top,
+            ),
+            getAppBarUI(),
+            Expanded(
+              child: _getSearchBarUI(),
+            )
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           Song newSong = Song.empty(suffix: Utils.currentDateTime());
           await songProvider.setSong(newSong); // create new song in firebase
+          setState(() {
+            _songs.add(newSong);
+          });
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => SongWriter(song: newSong)));
+                  builder: (context) => SongWriter(
+                        song: newSong,
+                        notifyParent: _refresh,
+                      )));
         },
         child: Icon(
           Icons.add,
@@ -85,24 +87,26 @@ class _SongsManagerState extends State<SongsManager> {
   }
 
   Future<List<Song>> _search(String search) async {
-    // return _songs
-    //     .where(
-    //         (song) => song.lyric.toLowerCase().contains(search.toLowerCase()))
-    //     .toList();
+    return _songs
+        .where(
+            (song) => song.lyric.toLowerCase().contains(search.toLowerCase()))
+        .toList();
   }
 
-  Widget _getSearchBarUI(List<Song> songs) {
+  Widget _getSearchBarUI() {
     return SearchBar<Song>(
       searchBarStyle: SearchBarStyle(
         padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
         borderRadius: BorderRadius.circular(10),
       ),
       listPadding: EdgeInsets.symmetric(horizontal: 3),
-      placeHolder: _getSongsContent(songs),
+      placeHolder: _getSongsContent(),
       loader: Center(
         child: CircularProgressIndicator(), // Activity Indicator
       ),
-      emptyWidget: NoResultFound(mess: 'Không có tác phẩm nào phù hợp!'),
+      emptyWidget: NoResultFound(
+        mess: 'Không có tác phẩm nào phù hợp!',
+      ),
       hintText: "Search by lyrics",
       hintStyle: TextStyle(
         fontSize: 17,
@@ -120,36 +124,40 @@ class _SongsManagerState extends State<SongsManager> {
     );
   }
 
-  Widget _getSongsContent(List<Song> songs) {
-    if (songs == null) {
+  Widget _getSongsContent() {
+    if (_songs == null) {
       return Center(child: CircularProgressIndicator());
-    } else if (songs.length != 0) {
+    } else if (_songs.length != 0) {
       return Padding(
         padding: EdgeInsets.symmetric(horizontal: 3),
         child: ListView.builder(
-          itemCount: songs.length,
+          itemCount: _songs.length,
           itemBuilder: (BuildContext context, int index) {
-            return SongItem(song: songs[index]);
+            return SongItem(song: _songs[index]);
           },
         ),
       );
     } else
-      return Center(child: Text('Empty!!!'));
+      return Center(
+        child: NoResultFound(
+          mess: 'Bạn chưa có tác phẩm nào cả',
+          url: 'assets/images/no_demo.png',
+        ),
+      );
   }
 
   Future<void> getAllSong() async {
-    // setState(() {
-    //   _songs = null; // UI effect
-    // });
-    // await Future.delayed(Duration(milliseconds: 500));
-    // List<Song> songs;
-    //
-    // songs = await firestoreService.fetchAllSongs();
-    // sortByTime(songs);
-    // setState(() {
-    //   _songs = songs;
-    // });
-    // print(_songs);
+    setState(() {
+      _songs = null; // UI effect
+    });
+    await Future.delayed(Duration(milliseconds: 500));
+    List<Song> songs;
+
+    songs = await firestoreService.fetchAllSongs();
+    sortByTime(songs);
+    setState(() {
+      _songs = songs;
+    });
   }
 
   _onRefresh() {
@@ -161,5 +169,9 @@ class _SongsManagerState extends State<SongsManager> {
     if (results == null) return results;
     results.sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
     return results;
+  }
+
+  _refresh() {
+    Future.delayed(Duration.zero, () => setState(() {}));
   }
 }

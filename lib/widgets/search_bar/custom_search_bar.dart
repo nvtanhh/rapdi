@@ -294,7 +294,9 @@ class _SearchBarState<T> extends State<SearchBar<T>>
   void onError(Error error) {
     setState(() {
       _loading = false;
-      _error = widget.onError != null ? widget.onError(error) : Text("error");
+      _error = widget.onError != null
+          ? widget.onError(error)
+          : Center(child: Text("error"));
     });
   }
 

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:Rapdi/app_theme.dart';
 import 'package:Rapdi/widgets/demo_item_card.dart';
+import 'package:Rapdi/widgets/no_result_found.dart';
 import 'package:Rapdi/widgets/silver_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -67,18 +68,25 @@ class _SongDemoState extends State<SongDemo> {
             SliverPadding(
               padding: EdgeInsets.all(15),
               sliver: _isReady
-                  ? SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) => Container(
-                          child: DemoItem(
-                            filePath: m4aFilesPath[index],
-                            songId: widget.songId,
-                            onDeleteFile: deleteFile,
+                  ? m4aFilesPath.length == 0
+                      ? SliverToBoxAdapter(
+                          child: NoResultFound(
+                            mess: 'Bạn chưa có bản demo nào cho tác phẩm này',
+                            url: 'assets/images/no_demo.png',
                           ),
-                        ),
-                        childCount: m4aFilesPath.length,
-                      ),
-                    )
+                        )
+                      : SliverList(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) => Container(
+                              child: DemoItem(
+                                filePath: m4aFilesPath[index],
+                                songId: widget.songId,
+                                onDeleteFile: deleteFile,
+                              ),
+                            ),
+                            childCount: m4aFilesPath.length,
+                          ),
+                        )
                   : SliverToBoxAdapter(
                       child: Center(child: CircularProgressIndicator()),
                     ),

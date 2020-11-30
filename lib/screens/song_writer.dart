@@ -28,7 +28,6 @@ class _SongWriterState extends State<SongWriter> {
   List<FocusNode> _lyricFocuses = [];
   List<TextEditingController> _lyricControllers = [];
 
-
   @override
   void initState() {
     generateLyrics();
@@ -38,7 +37,8 @@ class _SongWriterState extends State<SongWriter> {
   @override
   void dispose() {
     saveAll();
-    FocusScope.of(context).requestFocus(FocusNode()); // dismiss keyboard
+    // FocusScope.of(context).unfocus();
+    if (widget.notifyParent != null) widget.notifyParent();
     super.dispose();
   }
 

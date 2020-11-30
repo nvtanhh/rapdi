@@ -73,19 +73,7 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
       loader: Center(
         child: CircularProgressIndicator(), // Activity Indicator
       ),
-      placeHolder: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset('assets/images/the_search.svg'),
-            SizedBox(height: 30),
-            Text(
-              "Tìm vần ngay thôi!",
-              style: AppTheme.secondaryText,
-            ),
-          ],
-        ),
-      ),
+      placeHolder: Center(child: placeHolder()),
       emptyWidget: Center(
         child: Text("Empty"),
       ),
@@ -100,9 +88,6 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
       ),
       onSearch: _search,
       isRhymesSearch: true, // my custom props
-      // onItemFound: (RhymeSearchResults rs, int index) {
-      //   return Text(rs.toString());
-      // },
     );
   }
 
@@ -118,5 +103,19 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
         (jsonResponse).map((i) => RhymeSearchResults.fromJson(i)).toList();
 
     return results;
+  }
+
+  Widget placeHolder() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset('assets/images/the_search.svg'),
+        SizedBox(height: 30),
+        Text(
+          "Tìm vần ngay thôi!",
+          style: AppTheme.secondaryText,
+        ),
+      ],
+    );
   }
 }

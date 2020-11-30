@@ -13,22 +13,22 @@ class RhymesBookmark extends StatefulWidget {
 
 class _RhymesBookmarkState extends State<RhymesBookmark> {
   List bookmarks = [
-    "tình duyên - chính trị viên",
-    "tình duyên - tỉnh uỷ viên",
-    "tình duyên - tính chuyện",
-    "tình duyên - chính diện",
-    "tình duyên - chính điện",
-    "tình duyên - bình điện",
-    "tình duyên - chinh chiến",
-    "tình duyên - sinh tiền",
-    "tình duyên - tính chuyện",
-    "tình duyên - chính diện",
-    "tình duyên - chính điện",
-    "tình duyên - bình điện",
-    "tình duyên - chính diện",
-    "tình duyên - chính điện",
-    "tình duyên - bình điện",
-    "tình duyên - chinh chiến",
+    // "tình duyên - chính trị viên",
+    // "tình duyên - tỉnh uỷ viên",
+    // "tình duyên - tính chuyện",
+    // "tình duyên - chính diện",
+    // "tình duyên - chính điện",
+    // "tình duyên - bình điện",
+    // "tình duyên - chinh chiến",
+    // "tình duyên - sinh tiền",
+    // "tình duyên - tính chuyện",
+    // "tình duyên - chính diện",
+    // "tình duyên - chính điện",
+    // "tình duyên - bình điện",
+    // "tình duyên - chính diện",
+    // "tình duyên - chính điện",
+    // "tình duyên - bình điện",
+    // "tình duyên - chinh chiến",
   ];
 
   @override
