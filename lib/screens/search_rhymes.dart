@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:Rapdi/app_theme.dart';
 import 'package:Rapdi/custom_icon_icons.dart';
+import 'package:Rapdi/services/rhyme_services.dart';
+import 'package:Rapdi/widgets/no_result_found.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../models/RhymeSearchResults.dart';
 
@@ -15,7 +16,9 @@ import 'package:Rapdi/utils/globals.dart' as globals;
 class RhymesSearcher extends StatefulWidget {
   final VoidCallback onPush;
 
-  RhymesSearcher({Key key, this.onPush}) : super(key: key);
+  var search4me;
+
+  RhymesSearcher({Key key, this.onPush, this.search4me}) : super(key: key);
 
   @override
   _RhymesSearcherState createState() => _RhymesSearcherState();
@@ -23,6 +26,12 @@ class RhymesSearcher extends StatefulWidget {
 
 class _RhymesSearcherState extends State<RhymesSearcher> {
   // with AutomaticKeepAliveClientMixin<RhymesSearcher> {
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.search4me != null) _search(widget.search4me);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +60,17 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
+          widget.search4me != null
+              ? InkWell(
+                  child: const Icon(
+                    Icons.arrow_back_outlined,
+                    color: AppTheme.primaryColor,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                )
+              : Container(),
           Container(child: Text('Tìm vần', style: AppTheme.largeTitle)),
           InkWell(
             onTap: () {
@@ -66,6 +86,7 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
 
   getSearchBarUI() {
     return SearchBar<RhymeSearchResults>(
+      initValue: widget.search4me ?? '',
       searchBarStyle: SearchBarStyle(
         padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
         borderRadius: BorderRadius.circular(10),
@@ -74,9 +95,8 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
         child: CircularProgressIndicator(), // Activity Indicator
       ),
       placeHolder: Center(child: placeHolder()),
-      emptyWidget: Center(
-        child: Text("Empty"),
-      ),
+      emptyWidget: _showEmpty(),
+      onError: _showError,
       hintText: "Search",
       hintStyle: TextStyle(
         fontSize: 17,
@@ -92,16 +112,9 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
   }
 
   // get result form API
-  Future<List<RhymeSearchResults>> _search(String search) async {
-    globals.searchedText = search;
-
-    String jsonStr = await rootBundle.loadString('assets/rhymeResult.json');
-    List jsonResponse = jsonDecode(jsonStr);
-    // print(jsonResponse.length);
-
-    List<RhymeSearchResults> results =
-        (jsonResponse).map((i) => RhymeSearchResults.fromJson(i)).toList();
-
+  Future<List<RhymeSearchResults>> _search(String words) async {
+    globals.searchedText = words;
+    final results = await RhymesServices().findRhymes(words);
     return results;
   }
 
@@ -116,6 +129,20 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
           style: AppTheme.secondaryText,
         ),
       ],
+    );
+  }
+
+  Widget _showError(Error error) {
+    return NoResultFound(
+      mess: "Oops lỗi rồi!!!\nBạn vui lòng thử lại với từ khác nhé.",
+      url: 'assets/images/error.svg',
+    );
+  }
+
+  Widget _showEmpty() {
+    return NoResultFound(
+      mess: "SORRY, Không tìm thấy vần nào hết",
+      url: 'assets/images/no_result.svg',
     );
   }
 }

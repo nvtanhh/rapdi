@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:Rapdi/models/Song.dart';
 import 'package:Rapdi/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +41,7 @@ class FiretoreService extends ChangeNotifier {
   }
 
   //Delete
-  Future<void> removeSong(String songId) {
-    return _db.collection(collectionName).doc(songId).delete();
+  Future<void> removeSong(String songId) async {
+    _db.collection(collectionName).doc(songId).delete();
   }
 }

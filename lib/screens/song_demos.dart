@@ -72,7 +72,7 @@ class _SongDemoState extends State<SongDemo> {
                       ? SliverToBoxAdapter(
                           child: NoResultFound(
                             mess: 'Bạn chưa có bản demo nào cho tác phẩm này',
-                            url: 'assets/images/no_demo.png',
+                            url: 'assets/images/no_demo.svg',
                           ),
                         )
                       : SliverList(

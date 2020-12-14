@@ -7,8 +7,7 @@ class AppTheme {
   static const Color primaryColor = Color(0xFF020887);
   static const Color primaryLightColor = Color(0xFFF4F5FF);
   static const Color accentColor = Color(0xFF3F0287);
-  static const Color accent2Color = Color(0xFF024A87);
-  // static const Color appBarColor = Color(0xC8F8F8F8);
+  // static const Color accent2Color = Color(0xFF024A87);
   static const Color searhBarFill = Color(0xFF767680);
   static const Color textColor = Colors.black87;
   static const Color holderColor = Color(0xFF999999);

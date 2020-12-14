@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:Rapdi/app_theme.dart';
 import 'package:Rapdi/models/RhymeSearchResults.dart';
+import 'package:Rapdi/widgets/no_result_found.dart';
 import 'package:Rapdi/widgets/rhyme_list_wrapper.dart';
 import 'package:async/async.dart';
 import 'package:flappy_search_bar/scaled_tile.dart';
@@ -209,6 +210,8 @@ class SearchBar<T> extends StatefulWidget {
 
   final VoidCallback onRefreshed;
 
+  final String initValue;
+
   //================ My adding ================//
 
   SearchBar({
@@ -244,6 +247,7 @@ class SearchBar<T> extends StatefulWidget {
     this.headerPadding = const EdgeInsets.all(0),
     this.isRhymesSearch = false,
     this.onRefreshed,
+    this.initValue,
   }) : super(key: key);
 
   @override
@@ -262,6 +266,8 @@ class _SearchBarState<T> extends State<SearchBar<T>>
 
   @override
   void initState() {
+    if (widget.initValue != null) _onTextChanged(widget.initValue);
+
     super.initState();
     searchBarController =
         widget.searchBarController ?? SearchBarController<T>();
@@ -321,6 +327,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
 
   void _cancel() {
     if (widget.onCancelled != null) {
+      FocusScope.of(context).unfocus();
       widget.onCancelled();
     }
 
@@ -355,6 +362,7 @@ class _SearchBarState<T> extends State<SearchBar<T>>
   }
 
   Widget _buildTabViewRhymes(List<T> items) {
+    if (items == null) return _error;
     List<RhymeSearchResults> list = items as List<RhymeSearchResults>;
     return DefaultTabController(
       length: list.length,
@@ -436,9 +444,12 @@ class _SearchBarState<T> extends State<SearchBar<T>>
                       padding: widget.searchBarStyle.padding,
                       child: Theme(
                         child: TextField(
-                          controller: _searchQueryController,
-                          onChanged: _onTextChanged,
-                          // onSubmitted: _onTextChanged,
+                          controller: _searchQueryController
+                            ..text = widget.initValue,
+                          onChanged:
+                              widget.isRhymesSearch ? null : _onTextChanged,
+                          onSubmitted:
+                              widget.isRhymesSearch ? _onTextChanged : null,
                           style: widget.textStyle,
                           decoration: InputDecoration(
                             icon: widget.icon,
@@ -491,6 +502,15 @@ class _SearchBarState<T> extends State<SearchBar<T>>
   }
 
   Widget _rhymeSearchTabView(RhymeSearchResults rhymeSearchResults) {
+    print(rhymeSearchResults.rhymesBag.length);
+
+    if (rhymeSearchResults.rhymesBag[0].length ==
+        0) // if this tab has no result
+      return NoResultFound(
+        mess: "Không tìm thấy vần phù hợp.",
+        url: "assets/images/empty.svg",
+      );
+
     int _showNum = rhymeSearchResults.rhymesBag.length > 2 ? 1 : 0;
     return ListView.builder(
         padding: EdgeInsets.only(top: 20),

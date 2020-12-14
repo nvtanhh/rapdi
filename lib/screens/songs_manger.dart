@@ -11,7 +11,11 @@ import 'package:Rapdi/widgets/no_result_found.dart';
 import 'package:Rapdi/widgets/song_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/utils.dart';
+import '../utils/utils.dart';
 
 class SongsManager extends StatefulWidget {
   SongsManager({
@@ -38,7 +42,7 @@ class _SongsManagerState extends State<SongsManager> {
     final songProvider = Provider.of<FiretoreService>(context);
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.only(top: 8.0, left: 18, right: 18),
+        padding: const EdgeInsets.only(top: 8),
         child: Column(
           children: [
             SizedBox(
@@ -76,7 +80,7 @@ class _SongsManagerState extends State<SongsManager> {
 
   getAppBarUI() {
     return Container(
-        // color: Colors.red,
+        padding: const EdgeInsets.only(left: 18, right: 18),
         height: 56,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -95,6 +99,7 @@ class _SongsManagerState extends State<SongsManager> {
 
   Widget _getSearchBarUI() {
     return SearchBar<Song>(
+      searchBarPadding: EdgeInsets.only(left: 18, right: 18),
       searchBarStyle: SearchBarStyle(
         padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
         borderRadius: BorderRadius.circular(10),
@@ -119,7 +124,10 @@ class _SongsManagerState extends State<SongsManager> {
       onSearch: _search,
       onRefreshed: _onRefresh,
       onItemFound: (Song song, int index) {
-        return SongItem(song: song);
+        return SongItem(
+          song: song,
+          onDelete: () => _deleteSong(index),
+        );
       },
     );
   }
@@ -128,20 +136,20 @@ class _SongsManagerState extends State<SongsManager> {
     if (_songs == null) {
       return Center(child: CircularProgressIndicator());
     } else if (_songs.length != 0) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 3),
-        child: ListView.builder(
-          itemCount: _songs.length,
-          itemBuilder: (BuildContext context, int index) {
-            return SongItem(song: _songs[index]);
-          },
-        ),
+      return ListView.builder(
+        itemCount: _songs.length,
+        itemBuilder: (BuildContext context, int index) {
+          return SongItem(
+            song: _songs[index],
+            onDelete: () => _deleteSong(index),
+          );
+        },
       );
     } else
       return Center(
         child: NoResultFound(
           mess: 'Bạn chưa có tác phẩm nào cả',
-          url: 'assets/images/no_demo.png',
+          url: 'assets/images/no_demo.svg',
         ),
       );
   }
@@ -173,5 +181,22 @@ class _SongsManagerState extends State<SongsManager> {
 
   _refresh() {
     Future.delayed(Duration.zero, () => setState(() {}));
+  }
+
+  void _deleteSong(int index) async {
+    print("_deleteSong " + index.toString());
+    var songId = _songs[index].songId;
+    FiretoreService().removeSong(songId);
+    //  delete record folder
+    final Directory _appDocDir = await getApplicationDocumentsDirectory();
+    final Directory _appDocDirFolder =
+        Directory('${_appDocDir.path}/song$songId/');
+    if (await _appDocDirFolder.exists()) {
+      await _appDocDirFolder.delete();
+    }
+    setState(() {
+      _songs.removeAt(index);
+    });
+    Utils.showToast("Đã xoá");
   }
 }

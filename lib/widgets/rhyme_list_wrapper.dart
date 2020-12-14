@@ -32,25 +32,25 @@ class _RhymesWrapperState extends State<RhymesWrapper>
   @override
   void initState() {
     super.initState();
-    // rhymes = widget.rhymes;
+    if (widget.rhymes.length != 0) {
+      _syllableNum = widget.rhymes[0].value.split(' ').length;
 
-    // _controller = ScrollController();
-    _syllableNum = widget.rhymes[0].value.split(' ').length;
+      _isVisible = widget.isVisible;
+      _perPage =
+          _perPage > widget.rhymes.length ? widget.rhymes.length : _perPage;
+      setState(() {
+        items.addAll(widget.rhymes.getRange(_present, _present + _perPage));
+        _present = _present + _perPage;
+      });
 
-    _isVisible = widget.isVisible;
-    _perPage =
-        _perPage > widget.rhymes.length ? widget.rhymes.length : _perPage;
-    setState(() {
-      items.addAll(widget.rhymes.getRange(_present, _present + _perPage));
-      _present = _present + _perPage;
-    });
-
-    if (_present >= widget.rhymes.length) _present += 1;
+      if (_present >= widget.rhymes.length) _present += 1;
+    }
   }
 
   @override
   // ignore: must_call_super
   Widget build(BuildContext context) {
+    if (widget.rhymes.length == 0) return Container();
     return Container(
       child: _isVisible
           ? Column(
@@ -97,7 +97,10 @@ class _RhymesWrapperState extends State<RhymesWrapper>
                           : _rhymeListItem(rhyme: items[index]);
                     },
                     separatorBuilder: (BuildContext context, int index) =>
-                        Divider(color: AppTheme.holderColor.withOpacity(.5), height: 5,),
+                        Divider(
+                      color: AppTheme.holderColor.withOpacity(.5),
+                      height: 5,
+                    ),
                   ),
                 )
               ],
@@ -189,7 +192,6 @@ class _RhymesWrapperState extends State<RhymesWrapper>
       _present = _present + _perPage;
     });
   }
-
 
   Widget loadMoreButton() {
     return Padding(

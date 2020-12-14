@@ -213,7 +213,6 @@ class _DemoItemState extends State<DemoItem> {
 
   AlertDialog _openQueryDeleteDialog() {
     return AlertDialog(title: Text("Xoá " + fileName + "?"),
-        // content: Text("$fileName ?"),
         actions: <Widget>[
           new FlatButton(
               child: const Text("HUỶ"),

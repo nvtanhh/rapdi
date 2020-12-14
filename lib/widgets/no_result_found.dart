@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class NoResultFound extends StatelessWidget {
   final String mess;
   final String url;
 
-  NoResultFound({this.mess, this.url = 'assets/images/no_result.png'});
+  NoResultFound({this.mess, this.url = 'assets/images/no_result.svg'});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class NoResultFound extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
+            SvgPicture.asset(
               url,
               width: size.width * 0.5,
             ),
