@@ -5,12 +5,11 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-
-
   // auth change user stream
   Stream<User> userStream() {
     return _auth.authStateChanges();
   }
+
 
   // register email/password
   Future registerWithEmailAndPassword(String email, String password) async {
@@ -104,7 +103,7 @@ class AuthService {
     }
   }
 
-  String getCurrentUserId() {
-    return _auth.currentUser.uid;
+  User getCurrentUser() {
+    return _auth.currentUser;
   }
 }

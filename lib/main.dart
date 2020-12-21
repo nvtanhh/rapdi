@@ -1,19 +1,20 @@
 import 'package:Rapdi/app_theme.dart';
-import 'package:Rapdi/locator.dart';
-import 'package:Rapdi/screens/root_page.dart';
 import 'package:Rapdi/services/auth.dart';
 import 'package:Rapdi/services/firestore_service.dart';
+import 'package:Rapdi/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
+import 'locator.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // configLoading();
   setupLocator();
+
   runApp(MyApp());
 }
 
@@ -36,7 +37,7 @@ class MyApp extends StatelessWidget {
           // primaryColorLight: AppTheme.accent2Color,
           accentColor: AppTheme.accentColor,
           backgroundColor: Colors.white,
-          primarySwatch: Colors.grey,
+          primarySwatch: Colors.deepPurple,
           appBarTheme: AppBarTheme(
             color: Colors.white,
             iconTheme: IconThemeData(color: AppTheme.primaryColor),
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Roboto',
         ),
         // home: SongDemo(songId: 2)
-        home: RootPage(),
+        home: SplashScreen(),
         builder: EasyLoading.init(),
         // home: SongWriter(),
         // home: RhymesBookmark(),

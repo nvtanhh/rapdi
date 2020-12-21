@@ -27,9 +27,9 @@ class Song {
       };
 
   Song.empty({String suffix}) {
-    userId = AuthService().getCurrentUserId();
+    userId = AuthService().getCurrentUser().uid;
     songId = uuid.v1();
-    title = 'Bài mới ' + suffix ?? '';
+    title = '';
     lyric = '';
     updatedAt = new DateTime.now();
   }

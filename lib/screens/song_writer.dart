@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:Rapdi/app_theme.dart';
 import 'package:Rapdi/custom_icon_icons.dart';
 import 'package:Rapdi/models/Song.dart';
@@ -11,8 +9,8 @@ import 'package:Rapdi/utils/utils.dart';
 import 'package:Rapdi/widgets/jumping_dot.dart';
 import 'package:Rapdi/widgets/recorder_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:provider/provider.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 class SongWriter extends StatefulWidget {
   // final LocalFileSystem localFileSystem;
@@ -29,12 +27,15 @@ class SongWriter extends StatefulWidget {
 
 class _SongWriterState extends State<SongWriter> {
   FiretoreService songProvider;
-  final _titleController = TextEditingController();
+
+  // final _titleController = TextEditingController();
+  String title;
   final _formKey = GlobalKey<FormState>();
   List<FocusNode> _lyricFocuses = [];
   List<TextEditingController> _lyricControllers = [];
   String suggestionWord = '';
   bool isKeyboardShowing = false;
+  int currentIndex = -1;
 
   final evenPrefix = [
     'A',
@@ -61,17 +62,22 @@ class _SongWriterState extends State<SongWriter> {
     'B'
   ]; // 10 -> 19
 
+  KeyboardVisibilityController keyboardVisibilityController;
+
   @override
   void initState() {
     super.initState();
+
+    title = widget.song.title ?? '';
     generateLyrics();
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
+
+    keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardVisibilityController.onChange.listen((bool visible) {
+      if (this.mounted)
         setState(() {
           isKeyboardShowing = visible;
         });
-      },
-    );
+    });
   }
 
   @override
@@ -83,7 +89,8 @@ class _SongWriterState extends State<SongWriter> {
 
   Future<void> saveAll() async {
     widget.song.lyric = getLyrics();
-    widget.song.title = _titleController.text.trim();
+    widget.song.title =
+        title.isNotEmpty ? title : "Bài mới " + Utils.currentDateTime();
     widget.song.updatedAt = DateTime.now();
     await songProvider.setSong(widget.song);
   }
@@ -161,7 +168,7 @@ class _SongWriterState extends State<SongWriter> {
                         (index) => _contentTextField(index))),
               ),
             ),
-            isKeyboardShowing ? _suggestionRhymesUI() : Container()
+            if (isKeyboardShowing) _suggestionRhymesUI()
           ],
         ),
       ),
@@ -173,7 +180,7 @@ class _SongWriterState extends State<SongWriter> {
       padding: const EdgeInsets.symmetric(horizontal: 18),
       child: TextField(
         enableSuggestions: false,
-        controller: _titleController..text = widget.song.title ?? '',
+        controller: TextEditingController()..text = title,
         textCapitalization: TextCapitalization.sentences,
         keyboardType: TextInputType.text,
         cursorColor: AppTheme.primaryColor,
@@ -184,14 +191,16 @@ class _SongWriterState extends State<SongWriter> {
             color: Colors.black,
             fontWeight: FontWeight.w600),
         decoration: InputDecoration.collapsed(
-          hintText: "Tên bài hát",
+          hintText: "Nhập tên bài hát",
           hintStyle: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
               color: Colors.black.withOpacity(.2)),
         ),
         maxLines: 1,
-        onChanged: (value) {},
+        onChanged: (value) {
+          title = value;
+        },
         onSubmitted: (value) {
           FocusScope.of(context).requestFocus(_lyricFocuses[0]);
         },
@@ -226,6 +235,10 @@ class _SongWriterState extends State<SongWriter> {
             prefixStyle: TextStyle(fontSize: 13, color: AppTheme.accentColor),
             border: InputBorder.none),
         onChanged: (value) => _processOnChange(index, value),
+        onTap: () {
+          // print('tab ' + index.toString());
+          detectSelectedText(_lyricControllers[index]);
+        },
         // FocusScope.of(context).requestFocus(focus);
       ),
     );
@@ -236,13 +249,13 @@ class _SongWriterState extends State<SongWriter> {
   }
 
   _processOnChange(int index, String value) {
-    detectSelectedText(index);
-
+    print('_processOnChange');
     if (value.isEmpty && index >= 1) {
       // print('// press delete key');
       setState(() {
         _lyricControllers.removeAt(index);
         _lyricFocuses[index - 1].requestFocus();
+        currentIndex = index - 1;
         _lyricFocuses.removeAt(index);
         suggestionWord = '';
       });
@@ -259,6 +272,7 @@ class _SongWriterState extends State<SongWriter> {
                     _lyricControllers[index - 1].text.length - value.length));
 
         _lyricFocuses[index - 1].requestFocus();
+        currentIndex = index - 1;
         _lyricFocuses.removeAt(index);
       });
     } else {
@@ -276,6 +290,7 @@ class _SongWriterState extends State<SongWriter> {
                 ..selection =
                     TextSelection.fromPosition(TextPosition(offset: 1)));
           _lyricFocuses.insert(index + 1, FocusNode()..requestFocus());
+          currentIndex = index + 1;
         });
         suggestRhymes(index + 1); // new line
       }
@@ -344,15 +359,20 @@ class _SongWriterState extends State<SongWriter> {
                           itemBuilder: (_, index) {
                             var rhyme = snapshot.data[index];
                             return InkWell(
-                              onTap: (){
-                                print(rhyme);
+                              onTap: () {
+                                var currentText =
+                                    _lyricControllers[currentIndex].text;
+                                _lyricControllers[currentIndex].text =
+                                    currentText + " " + rhyme;
+                                _lyricControllers[currentIndex].selection =
+                                    TextSelection.fromPosition(TextPosition(
+                                        offset: currentText.length));
                               },
                               child: Container(
                                 padding: EdgeInsets.only(right: 10, left: 10),
                                 margin: EdgeInsets.only(right: 5),
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
-                                    // border: Border.all(color: Theme.of(context).accentColor),
                                     color: Theme.of(context)
                                         .primaryColor
                                         .withOpacity(0.5)),
@@ -372,13 +392,11 @@ class _SongWriterState extends State<SongWriter> {
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting)
-            return Expanded(
-              child: Center(
-                child: Container(
-                    child: JumpingDots(
-                  color: Theme.of(context).primaryColor,
-                )),
-              ),
+            return Center(
+              child: Container(
+                  child: JumpingDots(
+                color: Theme.of(context).primaryColor,
+              )),
             );
           return Container();
         },
@@ -387,9 +405,12 @@ class _SongWriterState extends State<SongWriter> {
   }
 
   String getSelectionText(int index) {
-    return _lyricControllers[index].text.substring(
-        _lyricControllers[index].selection.baseOffset,
-        _lyricControllers[index].selection.extentOffset);
+    //   return _lyricControllers[index].text.substring(
+    //       _lyricControllers[index].selection.baseOffset,
+    //       _lyricControllers[index].selection.extentOffset);
+    return _lyricControllers[index]
+        .selection
+        .textInside(_lyricControllers[index].text);
   }
 
   Future<List<String>> findRhymes() async {
@@ -429,13 +450,14 @@ class _SongWriterState extends State<SongWriter> {
     );
   }
 
-  void detectSelectedText(int index) {
-    var selectedText = getSelectionText(index);
-    if (selectedText.isNotEmpty) {
-      print("selected:  " + selectedText);
-      setState(() {
-        suggestionWord = selectedText;
-      });
-    }
+  void detectSelectedText(TextEditingController textController) {
+    // var selectedText = getSelectionText(textController);
+    print("selected " + textController.selection.textInside(textController.text));
+    // print("selected:  " + selectedText);
+    // if (selectedText.isNotEmpty) {
+    //   // setState(() {
+    //   //   suggestionWord = selectedText;
+    //   // });
+    // }
   }
 }

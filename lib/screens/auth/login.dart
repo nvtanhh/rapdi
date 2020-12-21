@@ -1,3 +1,4 @@
+import 'package:Rapdi/navigator/main_navigator.dart';
 import 'package:Rapdi/screens/auth/or_divider.dart';
 import 'package:Rapdi/screens/auth/signup.dart';
 import 'package:Rapdi/screens/auth/social_icon.dart';
@@ -132,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (result is User) {
         await EasyLoading.dismiss();
         print("user id " + result.uid);
+        // navigateToHome(context);
       } else {
         await EasyLoading.dismiss();
         Utils.showToast(result);
@@ -148,6 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
       Utils.showToast("OOPS... Lỗi rồi, Bạn vui long thử lại sau nhé!");
     }
     await EasyLoading.dismiss();
+    // navigateToHome(context);
   }
 
   void _loginFacebook() async {
@@ -157,7 +160,15 @@ class _LoginScreenState extends State<LoginScreen> {
     if(result == null){
       Utils.showToast("OOPS... Lỗi rồi, Bạn vui lòng thử lại sau nhé!");
     }
+    await EasyLoading.dismiss();
+    // navigateToHome(context);
   }
+}
+
+
+void navigateToHome(BuildContext context){
+  Route route = MaterialPageRoute(builder: (context) => MainNavigator());
+  Navigator.pushReplacement(context, route);
 }
 
 class Background extends StatelessWidget {

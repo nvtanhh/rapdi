@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:Rapdi/models/Song.dart';
 import 'package:Rapdi/services/auth.dart';
@@ -13,7 +12,7 @@ class FiretoreService extends ChangeNotifier {
   Stream<List<Song>> fetSongsAsStream() {
     return _db
         .collection(collectionName)
-        .where('uid', isEqualTo: AuthService().getCurrentUserId())
+        .where('uid', isEqualTo: AuthService().getCurrentUser().uid)
         // .orderBy('updatedAt')
         .snapshots()
         .map((snapshot) =>
@@ -23,8 +22,7 @@ class FiretoreService extends ChangeNotifier {
   Future<List<Song>> fetchAllSongs() async {
     var result = await _db
         .collection(collectionName)
-        .where('uid', isEqualTo: AuthService().getCurrentUserId())
-        // .orderBy('updatedAt')
+        .where('uid', isEqualTo: AuthService().getCurrentUser().uid)
         .get();
     List<Song> songs =
         result.docs.map((doc) => Song.fromJson(doc.data())).toList();

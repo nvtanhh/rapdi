@@ -60,17 +60,16 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          widget.search4me != null
-              ? InkWell(
-                  child: const Icon(
-                    Icons.arrow_back_outlined,
-                    color: AppTheme.primaryColor,
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                )
-              : Container(),
+          if (widget.search4me != null)
+            InkWell(
+              child: const Icon(
+                Icons.arrow_back_outlined,
+                color: AppTheme.primaryColor,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           Container(child: Text('Tìm vần', style: AppTheme.largeTitle)),
           InkWell(
             onTap: () {
@@ -86,7 +85,7 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
 
   getSearchBarUI() {
     return SearchBar<RhymeSearchResults>(
-      initValue: widget.search4me ?? '',
+      initValue: widget.search4me,
       searchBarStyle: SearchBarStyle(
         padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
         borderRadius: BorderRadius.circular(10),

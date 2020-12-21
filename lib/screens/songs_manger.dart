@@ -15,7 +15,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../utils/utils.dart';
-import '../utils/utils.dart';
 
 class SongsManager extends StatefulWidget {
   SongsManager({
@@ -57,7 +56,7 @@ class _SongsManagerState extends State<SongsManager> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Song newSong = Song.empty(suffix: Utils.currentDateTime());
+          Song newSong = Song.empty();
           await songProvider.setSong(newSong); // create new song in firebase
           setState(() {
             _songs.add(newSong);
@@ -162,6 +161,7 @@ class _SongsManagerState extends State<SongsManager> {
     List<Song> songs;
 
     songs = await firestoreService.fetchAllSongs();
+
     sortByTime(songs);
     setState(() {
       _songs = songs;
