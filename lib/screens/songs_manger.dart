@@ -60,6 +60,7 @@ class _SongsManagerState extends State<SongsManager> {
           await songProvider.setSong(newSong); // create new song in firebase
           setState(() {
             _songs.add(newSong);
+            sortByTime(_songs);
           });
           Navigator.push(
               context,
@@ -139,6 +140,7 @@ class _SongsManagerState extends State<SongsManager> {
         itemCount: _songs.length,
         itemBuilder: (BuildContext context, int index) {
           return SongItem(
+            key: ObjectKey(_songs[index]),
             song: _songs[index],
             onDelete: () => _deleteSong(index),
           );
