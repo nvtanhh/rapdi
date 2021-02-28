@@ -35,7 +35,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   width: size.width * 0.8,
                   alignment: Alignment.center,
                   child: Text(
-                    "SIGNUP",
+                    "ĐĂNG KÝ",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -48,24 +48,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 SizedBox(height: size.height * 0.03),
                 RoundedInputField(
                   // autofocus: true,
-                  hintText: "Your Email",
+                  hintText: "Địa chỉ email",
                   onChanged: (value) {
                     _email = value;
                   },
                 ),
                 RoundedPasswordField(
+                  hintText: "Mật khẩu",
                   onChanged: (value) {
                     _password = value;
                   },
                 ),
                 RoundedPasswordField(
-                  hintText: "Retype password",
+                  hintText: "Nhập lại mật khẩu",
                   onChanged: (value) {
                     _rePassword = value;
                   },
                 ),
                 RoundedButton(
-                  text: "SIGNUP",
+                  text: "ĐĂNG KÝ",
                   press: () async {
                     if (_formKey.currentState.validate()) {
                       if (_password != _rePassword) {
@@ -78,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Navigator.of(context).pop(); // pop out the popup
 
                           // show toast and redirect to login screen
-                          EasyLoading.showSuccess("SignUp successfully!");
+                          EasyLoading.showSuccess("Đăng ký thành công!");
                           Navigator.pushReplacement(context,
                               MaterialPageRoute(builder: (context) {
                             return LoginScreen(

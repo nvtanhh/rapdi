@@ -112,7 +112,7 @@ class _SongsManagerState extends State<SongsManager> {
       emptyWidget: NoResultFound(
         mess: 'Không có tác phẩm nào phù hợp!',
       ),
-      hintText: "Search by lyrics",
+      hintText: "Tìm kiếm bằng lyrics",
       hintStyle: TextStyle(
         fontSize: 17,
         color: AppTheme.holderColor,

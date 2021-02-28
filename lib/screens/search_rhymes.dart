@@ -1,5 +1,6 @@
 import 'package:Rapdi/app_theme.dart';
 import 'package:Rapdi/custom_icon_icons.dart';
+import 'package:Rapdi/screens/rhymes_bookmark.dart';
 import 'package:Rapdi/services/rhyme_services.dart';
 import 'package:Rapdi/widgets/no_result_found.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,11 +13,9 @@ import 'package:Rapdi/widgets/search_bar/search_bar_style.dart';
 import 'package:Rapdi/utils/globals.dart' as globals;
 
 class RhymesSearcher extends StatefulWidget {
-  final VoidCallback onPush;
-
   var search4me;
 
-  RhymesSearcher({Key key, this.onPush, this.search4me}) : super(key: key);
+  RhymesSearcher({Key key, this.search4me}) : super(key: key);
 
   @override
   _RhymesSearcherState createState() => _RhymesSearcherState();
@@ -69,13 +68,15 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
               },
             ),
           Container(child: Text('Tìm vần', style: AppTheme.largeTitle)),
-          InkWell(
-            onTap: () {
-              widget.onPush();
-            },
-            child: Icon(CustomIcon.bookmark,
-                size: 24, color: AppTheme.primaryColor),
-          )
+          Container()
+          // InkWell(
+          //   onTap: () {
+          //     Navigator.push(context,
+          //         MaterialPageRoute(builder: (context) => RhymesBookmark()));
+          //   },
+          //   child: Icon(CustomIcon.bookmark,
+          //       size: 24, color: AppTheme.primaryColor),
+          // )
         ],
       ),
     );
@@ -94,7 +95,7 @@ class _RhymesSearcherState extends State<RhymesSearcher> {
       placeHolder: Center(child: placeHolder()),
       emptyWidget: _showEmpty(),
       onError: _showError,
-      hintText: "Search",
+      hintText: "Thử tìm với 'tình duyên'",
       hintStyle: TextStyle(
         fontSize: 17,
         color: AppTheme.holderColor,

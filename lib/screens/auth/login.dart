@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: size.width * 0.8,
                   alignment: Alignment.center,
                   child: Text(
-                    "LOGIN",
+                    "ĐĂNG NHẬP",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -69,18 +69,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: size.height * 0.05),
                 RoundedInputField(
                   initValue: _email,
-                  hintText: "Your Email",
+                  hintText: "Địa chỉ email",
                   onChanged: (value) {
                     _email = value;
                   },
                 ),
                 RoundedPasswordField(
+                  hintText: 'Mật khẩu',
                   onChanged: (value) {
                     _password = value;
                   },
                 ),
                 RoundedButton(
-                  text: "LOGIN",
+                  text: "ĐĂNG NHẬP",
                   press: () async {
                     if (_formKey.currentState.validate()) {
                       _login();
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
   _loginGoogle() async {
     Utils.onLoading();
     dynamic result = await AuthService().signInWithGoogle();
-    if(result == null){
+    if (result == null) {
       Utils.showToast("OOPS... Lỗi rồi, Bạn vui long thử lại sau nhé!");
     }
     await EasyLoading.dismiss();
@@ -155,9 +156,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _loginFacebook() async {
     Utils.onLoading();
-    dynamic result =  await AuthService().signInWithFacebook();
+    dynamic result = await AuthService().signInWithFacebook();
     await EasyLoading.dismiss();
-    if(result == null){
+    if (result == null) {
       Utils.showToast("OOPS... Lỗi rồi, Bạn vui lòng thử lại sau nhé!");
     }
     await EasyLoading.dismiss();
@@ -165,8 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 }
 
-
-void navigateToHome(BuildContext context){
+void navigateToHome(BuildContext context) {
   Route route = MaterialPageRoute(builder: (context) => MainNavigator());
   Navigator.pushReplacement(context, route);
 }

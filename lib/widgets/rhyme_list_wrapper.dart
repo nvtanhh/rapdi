@@ -159,7 +159,8 @@ class _RhymesWrapperState extends State<RhymesWrapper>
                 Expanded(child: Text(rhyme.value, style: AppTheme.bodyText)),
                 InkWell(
                   onTap: () {
-                    clickInfor(rhyme.value);
+                    // clickInfor(rhyme.value);
+                    Utils.showToast('Chức năng từ điển sẽ sớm có');
                   },
                   child: Icon(Icons.info_outline_rounded,
                       size: 28, color: AppTheme.primaryColor),
@@ -169,7 +170,8 @@ class _RhymesWrapperState extends State<RhymesWrapper>
                 ),
                 InkWell(
                   onTap: () {
-                    onAddBookmark(rhyme.value);
+                    Utils.showToast('Chức năng thêm bookmark sẽ sớm có');
+                    // onAddBookmark(rhyme.value);
                   },
                   child: Icon(CustomIcon.bookmark_outline,
                       size: 24, color: AppTheme.primaryColor),
@@ -206,9 +208,7 @@ class _RhymesWrapperState extends State<RhymesWrapper>
               child: Text(
                 "Xem thêm",
                 style: TextStyle(
-                    fontSize: 15,
-                    color: AppTheme.primaryColor.withOpacity(.7),
-                    fontFamily: 'Roboto'),
+                    fontSize: 15, color: AppTheme.primaryColor.withOpacity(.7)),
               ),
             ),
           ),

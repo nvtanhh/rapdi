@@ -57,13 +57,14 @@ class _SongItemState extends State<SongItem> {
                 child: Container(
                   child: Text(
                     Utils.getTimeAgo(song.updatedAt),
-                    style: TextStyle(fontSize: 17, color: Colors.grey),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                 ),
               ),
               Expanded(
                 flex: 10,
                 child: Container(
+                  margin: EdgeInsets.only(left: 5),
                   child: Column(
                     children: [
                       Container(
@@ -105,7 +106,6 @@ class _SongItemState extends State<SongItem> {
   var songTitle =
       TextStyle(fontSize: 17, color: Colors.black, fontWeight: FontWeight.bold);
   var songContentTextStyle = TextStyle(
-      fontFamily: 'Roboto',
       fontWeight: FontWeight.normal,
       fontSize: 16,
       letterSpacing: 0.4,

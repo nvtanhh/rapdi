@@ -27,8 +27,8 @@ class SongsNavigator extends StatelessWidget {
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context, {Song song}) {
     return {
       TabNavigatorRoutes.root: (context) => new SongsManager(
-        // onPush: (Song song) => _push(context, song: song),  // onPush called with a song object
-      ),
+          // onPush: (Song song) => _push(context, song: song),  // onPush called with a song object
+          ),
       // TabNavigatorRoutes.detail: (context) => SongWriter(song: song),
     };
   }

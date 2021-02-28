@@ -12,13 +12,16 @@ class RhymesSearcherNavigator extends StatelessWidget {
 
   RhymesSearcherNavigator({this.navigatorKey});
 
-  void _push(BuildContext context,) {
+  void _push(
+    BuildContext context,
+  ) {
     var routeBuilders = _routeBuilders(context);
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => routeBuilders[TabNavigatorRoutes.bookmark](context),
+        builder: (context) =>
+            routeBuilders[TabNavigatorRoutes.bookmark](context),
       ),
     );
   }
@@ -26,7 +29,7 @@ class RhymesSearcherNavigator extends StatelessWidget {
   Map<String, WidgetBuilder> _routeBuilders(BuildContext context) {
     return {
       TabNavigatorRoutes.root: (context) => RhymesSearcher(
-            onPush: () => _push(context),
+          // onPush: () => _push(context),
           ),
       TabNavigatorRoutes.bookmark: (context) => RhymesBookmark(),
     };

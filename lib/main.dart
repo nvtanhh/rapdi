@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'locator.dart';
@@ -17,7 +18,6 @@ void main() async {
 
   runApp(MyApp());
 }
-
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -47,7 +47,8 @@ class MyApp extends StatelessWidget {
               opacity: 10.0,
             ),
           ),
-          fontFamily: 'Roboto',
+          textTheme:
+              GoogleFonts.robotoTextTheme().apply(bodyColor: Colors.black87),
         ),
         // home: SongDemo(songId: 2)
         home: SplashScreen(),

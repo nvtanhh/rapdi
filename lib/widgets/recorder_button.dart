@@ -132,58 +132,61 @@ class _RecorderButtonState extends State<RecorderButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // height: 30,
-      width: 100,
-      alignment: Alignment.center,
-      // color: Colors.white,
-      decoration: BoxDecoration(
-        color: !_isRecording ? Colors.white : AppTheme.darkRed,
-        boxShadow: [
-          new BoxShadow(
-            color: !_isRecording
-                ? AppTheme.accentColor.withOpacity(.3)
-                : AppTheme.darkRed.withOpacity(.3),
-            blurRadius: 2, // soften the shadow
-            spreadRadius: 1,
-            offset: new Offset(1.0, 2.0),
-          )
-        ],
-        borderRadius: BorderRadius.all(Radius.circular(50)),
-      ),
-      child: GestureDetector(
-        onTap: _isRecording ? _stopRecording : _startRecording,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: !_isRecording
-                ? [
-                    Icon(Icons.circle, size: 20, color: AppTheme.darkRed),
-                    SizedBox(width: 5),
-                    Text('Ghi âm',
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                          height: 1.5,
-                          color: AppTheme.darkRed,
-                        )),
-                  ]
-                : [
-                    Icon(Icons.stop_rounded, size: 24, color: Colors.white),
-                    SizedBox(width: 5),
-                    Text(timeText,
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w700,
-                            height: 1.5,
-                            color: Colors.white))
-                  ],
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          // height: 30,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: !_isRecording ? Colors.white : AppTheme.darkRed,
+            boxShadow: [
+              new BoxShadow(
+                color: !_isRecording
+                    ? AppTheme.accentColor.withOpacity(.3)
+                    : AppTheme.darkRed.withOpacity(.3),
+                blurRadius: 2, // soften the shadow
+                spreadRadius: 1,
+                offset: new Offset(1.0, 2.0),
+              )
+            ],
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+          ),
+          child: GestureDetector(
+            onTap: _isRecording ? _stopRecording : _startRecording,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: !_isRecording
+                    ? [
+                        Icon(Icons.circle, size: 20, color: AppTheme.darkRed),
+                        SizedBox(width: 5),
+                        Text('Ghi âm',
+                            style: TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              height: 1.5,
+                              color: AppTheme.darkRed,
+                            )),
+                      ]
+                    : [
+                        Icon(Icons.stop_rounded, size: 24, color: Colors.white),
+                        SizedBox(width: 5),
+                        Text(timeText,
+                            style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700,
+                                height: 1.5,
+                                color: Colors.white))
+                      ],
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

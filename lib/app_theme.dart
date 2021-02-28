@@ -14,7 +14,6 @@ class AppTheme {
   static const Color darkRed = Color(0xFFD80000);
 
   static const TextStyle largeTitle = TextStyle(
-    fontFamily: 'Roboto',
     fontWeight: FontWeight.bold,
     fontSize: 34,
     letterSpacing: 0.4,
@@ -22,7 +21,6 @@ class AppTheme {
     color: primaryColor,
   );
   static const TextStyle listTitle = TextStyle(
-    fontFamily: 'Roboto',
     fontWeight: FontWeight.w600,
     fontSize: 20,
     letterSpacing: 0.4,
@@ -30,7 +28,6 @@ class AppTheme {
     color: Colors.black87,
   );
   static const TextStyle appbarTitle = TextStyle(
-    fontFamily: 'Roboto',
     fontWeight: FontWeight.w700,
     fontSize: 17,
     letterSpacing: 0.4,
@@ -39,7 +36,6 @@ class AppTheme {
   );
 
   static const TextStyle bodyText = TextStyle(
-    fontFamily: 'Roboto',
     fontWeight: FontWeight.normal,
     fontSize: 17,
     letterSpacing: 0.4,
@@ -47,9 +43,7 @@ class AppTheme {
     color: Colors.black87,
   );
 
-
   static const TextStyle secondaryText = TextStyle(
-    fontFamily: 'Roboto',
     fontWeight: FontWeight.normal,
     fontSize: 17,
     letterSpacing: 0.4,
@@ -57,7 +51,6 @@ class AppTheme {
     color: Colors.black45,
   );
   static const TextStyle captionText = TextStyle(
-    fontFamily: 'Roboto',
     fontWeight: FontWeight.w600,
     fontSize: 13,
     color: Colors.grey,

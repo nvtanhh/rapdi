@@ -447,7 +447,9 @@ class _SearchBarState<T> extends State<SearchBar<T>>
                           autofocus: false,
                           autocorrect: false,
                           controller: _searchQueryController
-                            ..text = widget.initValue,
+                            ..text = widget.initValue
+                            ..selection = TextSelection.collapsed(
+                                offset: _searchQueryController.text.length),
                           onChanged:
                               widget.isRhymesSearch ? null : _onTextChanged,
                           onSubmitted:
