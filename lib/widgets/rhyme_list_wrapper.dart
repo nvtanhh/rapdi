@@ -2,7 +2,9 @@ import 'package:Rapdi/app_theme.dart';
 import 'package:Rapdi/custom_icon_icons.dart';
 import 'package:Rapdi/models/Rhyme.dart';
 import 'package:Rapdi/utils/utils.dart';
+import 'package:Rapdi/widgets/dictionary.dart';
 import 'package:flutter/material.dart';
+import 'package:web_scraper/web_scraper.dart';
 
 // ignore: must_be_immutable
 class RhymesWrapper extends StatefulWidget {
@@ -157,30 +159,49 @@ class _RhymesWrapperState extends State<RhymesWrapper>
             child: Row(
               children: <Widget>[
                 Expanded(child: Text(rhyme.value, style: AppTheme.bodyText)),
-                InkWell(
-                  onTap: () {
-                    // clickInfor(rhyme.value);
-                    Utils.showToast('Chức năng từ điển sẽ sớm có');
+                GestureDetector(
+                  onTap: () async {
+                    String mean = await _getDefinitions(rhyme.value);
+                    _showDefinitionsDialog(
+                        rhyme.value,
+                        mean ??
+                            'Rất tiết! Mình không tìm thấy nghĩa của từ này.');
                   },
                   child: Icon(Icons.info_outline_rounded,
                       size: 28, color: AppTheme.primaryColor),
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                InkWell(
-                  onTap: () {
-                    Utils.showToast('Chức năng thêm bookmark sẽ sớm có');
-                    // onAddBookmark(rhyme.value);
-                  },
-                  child: Icon(CustomIcon.bookmark_outline,
-                      size: 24, color: AppTheme.primaryColor),
                 ),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  _showDefinitionsDialog(String rhyme, String definition) {
+    showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+          title: Text(rhyme),
+          content: Text(definition),
+          actions: <Widget>[
+            new FlatButton(
+              child: const Text(
+                "Xem thêm",
+                style: TextStyle(color: AppTheme.holderColor),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MyDictionary(word: rhyme)));
+              },
+            ),
+            new FlatButton(
+                child: const Text("Okie"),
+                onPressed: () => Navigator.pop(context)),
+          ]),
     );
   }
 
@@ -218,12 +239,26 @@ class _RhymesWrapperState extends State<RhymesWrapper>
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-}
 
-void clickInfor(String value) {}
+  Future<String> _getDefinitions(String value) async {
+    final webScraper = WebScraper('https://vtudien.com');
+    try {
+      if (await webScraper
+          .loadWebPage('/viet-viet/dictionary/nghia-cua-tu-$value')) {
+        final elements = webScraper.getElement('#idnghia > span', []);
+        return elements[0]['title'];
+      }
+    } catch (error) {
+      return null;
+    }
 
-void onAddBookmark(String matchedRhyme) {
-  Utils.showToast('Đã thêm vào bookmark');
+    return null;
+  }
+
+  void clickInfor(String value) {}
+
+  void onAddBookmark(String matchedRhyme) {
+    Utils.showToast('Đã thêm vào bookmark');
+  }
 }

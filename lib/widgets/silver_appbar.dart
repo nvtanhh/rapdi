@@ -6,8 +6,7 @@ import '../app_theme.dart';
 class CustomSilverAppbar extends StatelessWidget {
   final String title;
 
-  const CustomSilverAppbar({Key key, this.title = "Title"})
-      : super(key: key);
+  const CustomSilverAppbar({Key key, this.title = "Title"}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +50,9 @@ class CustomSilverAppbar extends StatelessWidget {
                       child: Container(),
                     ),
                     Container(
-                      height: 56,
+                      height: 70,
                       padding: const EdgeInsets.only(left: 18),
                       alignment: Alignment.centerLeft,
-                      // color: Colors.red,
                       child: Text(this.title, style: AppTheme.largeTitle),
                     )
                   ],

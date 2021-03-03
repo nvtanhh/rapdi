@@ -38,14 +38,7 @@ class _AccountState extends State<Account> {
                   SettingsSection(
                     title: 'Tài khoản',
                     tiles: [
-                      SettingsTile(
-                        title: 'Email',
-                        subtitle: (_auth.getCurrentUser().email == null ||
-                                _auth.getCurrentUser().email.isEmpty)
-                            ? null
-                            : _auth.getCurrentUser().email,
-                        leading: Icon(Icons.email_outlined),
-                      ),
+                      _buildAccountTitle(),
                       SettingsTile(
                           title: 'Đăng xuất',
                           leading: Icon(Icons.logout),
@@ -272,5 +265,31 @@ class _AccountState extends State<Account> {
 
   void rateApp() {
     LaunchReview.launch(androidAppId: "");
+  }
+
+  _buildAccountTitle() {
+    var providerId = _auth.getCurrentUser().providerData[0].providerId;
+    switch (providerId) {
+      case 'facebook.com':
+        return SettingsTile(
+          title: _auth.getCurrentUser().providerData[0].displayName,
+          leading: Icon(FontAwesomeIcons.facebook, color: Color(0xff3b5998)),
+        );
+        break;
+      case 'google.com':
+        return SettingsTile(
+          title: _auth.getCurrentUser().providerData[0].displayName,
+          leading: Icon(FontAwesomeIcons.google, color: Color(0xffae4335)),
+        );
+        break;
+      default:
+        return SettingsTile(
+          title: (_auth.getCurrentUser().email == null ||
+                  _auth.getCurrentUser().email.isEmpty)
+              ? null
+              : _auth.getCurrentUser().email,
+          leading: Icon(Icons.email_outlined),
+        );
+    }
   }
 }
